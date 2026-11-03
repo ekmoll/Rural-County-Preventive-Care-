@@ -72,7 +72,7 @@ Percentile thresholds are computed from the data at build time (pandas linear in
 - **Cholesterol screening:** not estimated in PLACES 2025 for Kentucky (120 counties) or Pennsylvania (67), so `Deficit_Score` and outcomes are missing there → 2,956 counties with a score.
 - **Unemployment 2023:** missing for Connecticut's 9 planning regions in the ERS file.
 - **Poverty 2023:** missing for Kalawao County, HI (15005).
-- Counties with complete data for the fully adjusted model (outcome, rurality, poverty, education, unemployment, region): **2,946**.
+- Counties with complete data for all three logistic models (outcome, rurality, poverty, education, unemployment, region): **2,946**.
 
 ## Notes
 
