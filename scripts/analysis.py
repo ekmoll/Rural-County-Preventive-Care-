@@ -83,9 +83,12 @@ needed = {
     "Model 3 (+ region)": ["High_Deficit_Burden_3plus", "Nonmetro", "PCTPOVALL_2023",
                            "PCT_BACHELORS_PLUS_2019_23", "Unemployment_rate_2023", "Census_Region"],
 }
+# All three models are fit to the same counties (complete data for every Model 3
+# variable, N = 2,946), so changes in the OR reflect adjustment, not sample changes.
+common = df.dropna(subset=needed["Model 3 (+ region)"])
 res_rows = []
 for name, (formula, _) in models.items():
-    d = df.dropna(subset=needed[name])
+    d = common
     fit = smf.logit(formula, data=d).fit(disp=0)
     ci = fit.conf_int()
     for term in fit.params.index:
