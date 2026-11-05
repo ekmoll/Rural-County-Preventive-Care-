@@ -3,16 +3,16 @@
 Dep. Variable:     High_Deficit_Burden_3plus   No. Observations:                 2946
 Model:                                 Logit   Df Residuals:                     2941
 Method:                                  MLE   Df Model:                            4
-Date:                       Tue, 29 Sep 2026   Pseudo R-squ.:                  0.2025
-Time:                               07:32:53   Log-Likelihood:                -1025.9
+Date:                       Thu, 05 Nov 2026   Pseudo R-squ.:                  0.2025
+Time:                               11:03:32   Log-Likelihood:                -1025.9
 converged:                              True   LL-Null:                       -1286.3
-Covariance Type:                   nonrobust   LLR p-value:                2.080e-111
+Covariance Type:                     cluster   LLR p-value:                2.080e-111
 ==============================================================================================
                                  coef    std err          z      P>|z|      [0.025      0.975]
 ----------------------------------------------------------------------------------------------
-Intercept                     -1.7157      0.407     -4.212      0.000      -2.514      -0.917
-Nonmetro                       1.0756      0.159      6.750      0.000       0.763       1.388
-PCTPOVALL_2023                 0.0724      0.012      6.189      0.000       0.049       0.095
-PCT_BACHELORS_PLUS_2019_23    -0.1093      0.012     -9.344      0.000      -0.132      -0.086
-Unemployment_rate_2023         0.0819      0.045      1.806      0.071      -0.007       0.171
+Intercept                     -1.7157      0.902     -1.901      0.057      -3.484       0.053
+Nonmetro                       1.0756      0.177      6.085      0.000       0.729       1.422
+PCTPOVALL_2023                 0.0724      0.036      2.009      0.045       0.002       0.143
+PCT_BACHELORS_PLUS_2019_23    -0.1093      0.026     -4.270      0.000      -0.159      -0.059
+Unemployment_rate_2023         0.0819      0.109      0.754      0.451      -0.131       0.295
 ==============================================================================================

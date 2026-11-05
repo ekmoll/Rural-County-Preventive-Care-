@@ -3,13 +3,13 @@
 Dep. Variable:     High_Deficit_Burden_3plus   No. Observations:                 2946
 Model:                                 Logit   Df Residuals:                     2944
 Method:                                  MLE   Df Model:                            1
-Date:                       Tue, 03 Nov 2026   Pseudo R-squ.:                 0.07159
-Time:                               07:21:30   Log-Likelihood:                -1194.3
+Date:                       Thu, 05 Nov 2026   Pseudo R-squ.:                 0.07159
+Time:                               11:03:32   Log-Likelihood:                -1194.3
 converged:                              True   LL-Null:                       -1286.3
-Covariance Type:                   nonrobust   LLR p-value:                 5.942e-42
+Covariance Type:                     cluster   LLR p-value:                 5.942e-42
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept     -2.9695      0.140    -21.282      0.000      -3.243      -2.696
-Nonmetro       1.7265      0.150     11.485      0.000       1.432       2.021
+Intercept     -2.9695      0.319     -9.296      0.000      -3.596      -2.343
+Nonmetro       1.7265      0.160     10.801      0.000       1.413       2.040
 ==============================================================================
