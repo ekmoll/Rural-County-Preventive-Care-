@@ -227,6 +227,14 @@ cond = pd.DataFrame([{"Given_deficit_in": a.replace("Deficit_", ""), "Also_defic
                      for a in flags for b in flags if a != b])
 cond.to_csv(os.path.join(OUT, "cooccurrence_conditional.csv"), index=False)
 
+# Joint deficit prevalence for each pair of services, observed vs expected if unrelated
+pairs = pd.DataFrame([{"Service_A": a.replace("Deficit_", ""), "Service_B": b.replace("Deficit_", ""),
+                       "Observed_joint_pct": round(100 * ((sc[a] == 1) & (sc[b] == 1)).mean(), 1),
+                       "Expected_joint_pct_if_unrelated": round(100 * prev[a] * prev[b], 1),
+                       "Ratio_observed_to_expected": round(((sc[a] == 1) & (sc[b] == 1)).mean() / (prev[a] * prev[b]), 2)}
+                      for i, a in enumerate(flags) for b in flags[i + 1:]])
+pairs.to_csv(os.path.join(OUT, "cooccurrence_pairs.csv"), index=False)
+
 pd.set_option("display.width", 200)
 print(t1.to_string(), "\n")
 print(t2.to_string(), "\n")
@@ -234,4 +242,6 @@ print(dist.to_string(), "\n")
 print(t3.round(3).to_string(index=False), "\n")
 print("Deficit prevalence by service:", (100 * prev).round(1).to_dict())
 print(ove.to_string(index=False))
-print(f"Conditional co-occurrence range: {cond.Observed_pct.min()}% to {cond.Observed_pct.max()}%")
+print(f"Two or more deficits: observed {100 * ove.Observed[2:].sum() / len(sc):.1f}%, "
+      f"expected {100 * ove.Expected_if_unrelated[2:].sum() / len(sc):.1f}%")
+print(pairs.to_string(index=False))
