@@ -4,7 +4,7 @@ Dep. Variable:     High_Deficit_Burden_3plus   No. Observations:                
 Model:                                 Logit   Df Residuals:                     2944
 Method:                                  MLE   Df Model:                            1
 Date:                       Thu, 05 Nov 2026   Pseudo R-squ.:                 0.07159
-Time:                               11:03:32   Log-Likelihood:                -1194.3
+Time:                               16:05:18   Log-Likelihood:                -1194.3
 converged:                              True   LL-Null:                       -1286.3
 Covariance Type:                     cluster   LLR p-value:                 5.942e-42
 ==============================================================================
