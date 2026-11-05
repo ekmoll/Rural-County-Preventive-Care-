@@ -89,7 +89,9 @@ common = df.dropna(subset=needed["Model 3 (+ region)"])
 res_rows = []
 for name, (formula, _) in models.items():
     d = common
-    fit = smf.logit(formula, data=d).fit(disp=0)
+    # Standard errors clustered by state (counties within a state share policy context)
+    fit = smf.logit(formula, data=d).fit(
+        disp=0, cov_type="cluster", cov_kwds={"groups": pd.factorize(d["StateAbbr"])[0]})
     ci = fit.conf_int()
     for term in fit.params.index:
         if term == "Intercept" or "Census_Region" in term:
@@ -198,10 +200,38 @@ for j, term in enumerate(names):
                      "CI_low": np.exp(lo), "CI_high": np.exp(hi), "p": p})
 
 t3 = pd.DataFrame(res_rows)
+t3.insert(4, "CI_method", np.where(t3["Model"].str.contains("Firth"),
+                                   "Penalized profile likelihood", "State-clustered"))
 t3.to_csv(os.path.join(OUT, "table3_logistic_models.csv"), index=False, float_format="%.4f")
+
+# ---- Figure 2: observed vs expected co-occurrence of deficits -----------------------
+# Expected counts assume the four deficit indicators are unrelated: a county's deficit in
+# one service does not change its probability of a deficit in another. Under that
+# assumption the number of deficits follows a Poisson-binomial distribution built from
+# each service's observed deficit prevalence.
+flags = ["Deficit_CHOLSCREEN", "Deficit_COLON_SCREEN", "Deficit_MAMMOUSE", "Deficit_DENTAL"]
+sc = df[df["Deficit_Score"].notna()]
+prev = sc[flags].mean()
+probs = np.array([1.0])
+for p in prev:
+    probs = np.convolve(probs, [1 - p, p])
+observed = sc["Deficit_Score"].astype(int).value_counts().reindex(range(5), fill_value=0)
+ove = pd.DataFrame({"Deficits": range(5), "Observed": observed.values,
+                    "Expected_if_unrelated": (probs * len(sc)).round(1)})
+ove.to_csv(os.path.join(OUT, "observed_vs_expected.csv"), index=False)
+
+# Share of counties with a deficit in service A that also have a deficit in service B
+cond = pd.DataFrame([{"Given_deficit_in": a.replace("Deficit_", ""), "Also_deficit_in": b.replace("Deficit_", ""),
+                      "Observed_pct": round(100 * sc.loc[sc[a] == 1, b].mean(), 1),
+                      "Expected_pct_if_unrelated": round(100 * prev[b], 1)}
+                     for a in flags for b in flags if a != b])
+cond.to_csv(os.path.join(OUT, "cooccurrence_conditional.csv"), index=False)
 
 pd.set_option("display.width", 200)
 print(t1.to_string(), "\n")
 print(t2.to_string(), "\n")
 print(dist.to_string(), "\n")
-print(t3.round(3).to_string(index=False))
+print(t3.round(3).to_string(index=False), "\n")
+print("Deficit prevalence by service:", (100 * prev).round(1).to_dict())
+print(ove.to_string(index=False))
+print(f"Conditional co-occurrence range: {cond.Observed_pct.min()}% to {cond.Observed_pct.max()}%")

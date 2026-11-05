@@ -46,7 +46,8 @@ def add_outcome(df, measures, pct, k, name="Y"):
 
 
 def fit(d, rhs, term="Nonmetro", cluster=False, y="Y"):
-    cols = [y, "Nonmetro", "StateAbbr"] + [c for c in COVARS if c in rhs]
+    # Every model, adjusted or not, uses counties with complete covariate data (common sample)
+    cols = [y, "Nonmetro", "StateAbbr"] + COVARS
     if "RUCC" in rhs:
         cols.append("RUCC_2023")
     for c in ("Nonmetro_Urban_Size", "Nonmetro_Metro_Adjacent"):
@@ -127,7 +128,7 @@ grad_rows = []
 for adj, extra in [("Unadjusted", ""), ("Adjusted (SES + region)", f" + {SES} + C(Census_Region)")]:
     # linear trend across RUCC 1-9
     dd = prim.dropna(subset=["RUCC_2023"])
-    cols = ["Y", "RUCC_2023", "StateAbbr"] + (COVARS if extra else [])
+    cols = ["Y", "RUCC_2023", "StateAbbr"] + COVARS  # common sample for both models
     dd = dd.dropna(subset=cols)
     r = smf.logit(f"Y ~ RUCC_2023{extra}", data=dd).fit(
         disp=0, maxiter=200, cov_type="cluster", cov_kwds={"groups": pd.factorize(dd["StateAbbr"])[0]})
